@@ -45,50 +45,50 @@ function ProgressBar(data)
         -- Want to use ox_lib's progress circle instead of bar?
         -- Change "progressBar" to "progressCircle" below & done!
         if lib.progressBar({
-            label = data.label,
-            duration = data.duration,
-            position = data.position or 'bottom',
-            useWhileDead = data.useWhileDead,
-            canCancel = data.canCancel,
-            disable = data.disable,
-            anim = {
-                dict = data.anim.dict or nil,
-                clip = data.anim.clip or nil,
-                flag = data.anim.flag or nil
-            },
-            prop = {
-                model = data.prop.model or nil,
-                bone = data.prop.bone or nil,
-                pos = data.prop.pos or nil,
-                rot = data.prop.rot or nil
-            }
-        }) then
+                label = data.label,
+                duration = data.duration,
+                position = data.position or 'bottom',
+                useWhileDead = data.useWhileDead,
+                canCancel = data.canCancel,
+                disable = data.disable,
+                anim = {
+                    dict = data.anim.dict or nil,
+                    clip = data.anim.clip or nil,
+                    flag = data.anim.flag or nil
+                },
+                prop = {
+                    model = data.prop.model or nil,
+                    bone = data.prop.bone or nil,
+                    pos = data.prop.pos or nil,
+                    rot = data.prop.rot or nil
+                }
+            }) then
             return true
         end
         return false
     elseif sh_config.setup.progress == 'qbcore' then
         local p = promise.new()
         QBCore.Functions.Progressbar(data.label, data.label, data.duration, data.useWhileDead, data.canCancel, {
-            disableMovement = data.disable.move,
-            disableCarMovement = data.disable.car,
-            disableMouse = false,
-            disableCombat = data.disable.combat
-        }, {
-            animDict = data.anim.dict or nil,
-            anim = data.anim.clip or nil,
-            flags = data.anim.flag or nil
-        }, {
-            model = data.prop.model or nil,
-            bone = data.prop.bone or nil,
-            coords = data.prop.pos or nil,
-            rotation = data.prop.rot or nil
-        }, {},
-        function()
-            p:resolve(true)
-        end,
-        function()
-            p:resolve(false)
-        end)
+                disableMovement = data.disable.move,
+                disableCarMovement = data.disable.car,
+                disableMouse = false,
+                disableCombat = data.disable.combat
+            }, {
+                animDict = data.anim.dict or nil,
+                anim = data.anim.clip or nil,
+                flags = data.anim.flag or nil
+            }, {
+                model = data.prop.model or nil,
+                bone = data.prop.bone or nil,
+                coords = data.prop.pos or nil,
+                rotation = data.prop.rot or nil
+            }, {},
+            function()
+                p:resolve(true)
+            end,
+            function()
+                p:resolve(false)
+            end)
         return Citizen.Await(p)
     else
         -- Add 'custom' progress bar here
@@ -98,7 +98,10 @@ end
 -- Send police dispatch message
 --- @param data table data.coords, data.street
 function PoliceDispatch(data)
-    if not data then print('^1[ERROR]: Failed to retrieve dispatch data, cannot proceed^0') return end
+    if not data then
+        print('^1[ERROR]: Failed to retrieve dispatch data, cannot proceed^0')
+        return
+    end
     if sh_config.police.dispatch == 'cd_dispatch' then
         local playerData = exports['cd_dispatch']:GetPlayerInfo()
         if not playerData then
@@ -109,7 +112,7 @@ function PoliceDispatch(data)
             job_table = sh_config.police.jobs,
             coords = playerData.coords,
             title = '10-88 - Store Robbery',
-            message = 'An alarm has been triggered at 24/7 on ' ..playerData.street,
+            message = 'An alarm has been triggered at 24/7 on ' .. playerData.street,
             flash = 0,
             unique_id = playerData.unique_id,
             sound = 1,
@@ -126,7 +129,7 @@ function PoliceDispatch(data)
     elseif sh_config.police.dispatch == 'ps-dispatch' then
         local alert = {
             coords = data.coords,
-            message = 'An alarm has been triggered at 24/7 on ' ..data.street,
+            message = 'An alarm has been triggered at 24/7 on ' .. data.street,
             dispatchCode = '10-88',
             description = 'Store Robbery',
             radius = 0,
@@ -147,7 +150,7 @@ function PoliceDispatch(data)
                 job = sh_config.police.jobs,
                 callLocation = playerData.coords,
                 callCode = { code = '10-88', snippet = 'Store Robbery' },
-                message = 'An alarm has been triggered at 24/7 on ' ..playerData.street_1,
+                message = 'An alarm has been triggered at 24/7 on ' .. playerData.street_1,
                 flashes = false,
                 image = image or nil,
                 blip = {
@@ -163,9 +166,9 @@ function PoliceDispatch(data)
     elseif sh_config.police.dispatch == 'core_dispatch' then
         local gender = IsPedMale(cache.ped) and 'male' or 'female'
         TriggerServerEvent('core_dispatch:addCall', '10-88', 'Potential Store Robbery',
-        {{icon = 'fa-venus-mars', info = gender}},
-        {data.coords.x, data.coords.y, data.coords.z},
-        'police', 30000, 52, 1, false)
+            { { icon = 'fa-venus-mars', info = gender } },
+            { data.coords.x, data.coords.y, data.coords.z },
+            'police', 30000, 52, 1, false)
     elseif sh_config.police.dispatch == 'rcore_dispatch' then
         local playerData = exports['rcore_dispatch']:GetPlayerData()
         if not playerData then
@@ -177,7 +180,7 @@ function PoliceDispatch(data)
             default_priority = 'low',
             coords = playerData.coords,
             job = sh_config.police.jobs,
-            text = 'An alarm has been triggered at 24/7 on ' ..playerData.street_1,
+            text = 'An alarm has been triggered at 24/7 on ' .. playerData.street_1,
             type = 'alerts',
             blip_time = 30,
             blip = {
@@ -194,7 +197,7 @@ function PoliceDispatch(data)
         TriggerEvent('aty_dispatch:SendDispatch', 'Potential Store Robbery', '10-88', 52, sh_config.police.jobs)
     elseif sh_config.police.dispatch == 'op-dispatch' then
         local job = 'police'
-        local text = 'An alarm has been triggered at 24/7 on ' ..data.street
+        local text = 'An alarm has been triggered at 24/7 on ' .. data.street
         local coords = data.coords
         local id = cache.serverId
         local title = '10-88 - Store Robbery'
@@ -205,12 +208,20 @@ function PoliceDispatch(data)
             coords = data.coords,
             title = '10-88 - Store Robbery',
             type = 'GENERAL',
-            message = 'An alarm has been triggered at 24/7 on ' ..data.street,
+            message = 'An alarm has been triggered at 24/7 on ' .. data.street,
             job = 'police',
         }
         TriggerServerEvent("SendAlert:police", alert)
     elseif sh_config.police.dispatch == 'emergencydispatch' then
-        TriggerServerEvent('emergencydispatch:emergencycall:new', 'police', '10-88 | Potential Store Robbery', data.coords, true)
+        TriggerServerEvent('emergencydispatch:emergencycall:new', 'police', '10-88 | Potential Store Robbery',
+            data.coords, true)
+    elseif sh_config.police.dispatch == 'codem-dispatch' then
+        exports['codem-dispatch']:CustomDispatch({
+            type = 'Robbery',
+            header = 'Store Robbery in progress',
+            text = 'An alarm has been triggered at 24/7 on ' .. data.street,
+            code = '10-52',
+        })
     elseif sh_config.police.dispatch == 'custom' then
         -- Add your custom dispatch system here
     else
@@ -225,11 +236,11 @@ function AddCircleZone(data)
         exports.ox_target:addSphereZone(data)
     elseif sh_config.setup.interact == 'qb-target' then
         exports['qb-target']:AddCircleZone(data.name, data.coords, data.radius, {
-            name = data.name,
-            debugPoly = sh_config.setup.debug}, {
-            options = data.options,
-            distance = 2,
-        })
+                name = data.name,
+                debugPoly = sh_config.setup.debug }, {
+                options = data.options,
+                distance = 2,
+            })
     elseif sh_config.setup.interact == 'interact' then
         exports.interact:AddInteraction({
             coords = data.coords,
