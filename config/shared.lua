@@ -53,7 +53,8 @@ return {
         -- Set your dispatch system
         -- Available options: 'cd_dispatch', 'ps-dispatch', 'qs-dispatch'
         -- 'core_dispatch', 'rcore_dispatch', aty_dispatch', 'op-dispatch',
-        -- 'origen_police', 'emergencydispatch', 'codem-dispatch' & 'custom' option
+        -- 'origen_police', 'emergencydispatch', 'codem-dispatch',
+        -- 'tk_dispatch' & 'custom' option
         dispatch = 'custom',
         -- Risk is a feature you can enable that will increase the players
         -- Reward payout based on the number of police online during the robbery!

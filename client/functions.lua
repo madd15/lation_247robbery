@@ -222,6 +222,22 @@ function PoliceDispatch(data)
             text = 'An alarm has been triggered at 24/7 on ' .. data.street,
             code = '10-52',
         })
+    elseif sh_config.police.dispatch == 'tk_dispatch' then
+        local alert = {
+            title = 'Store Robbery',
+            message = 'An alarm has been triggered at 24/7 on ' .. data.street,
+            code = '10-88',
+            coords = data.coords,
+            showLocation = true,
+            playSound = true,
+            blip = {
+                color = 3,
+                sprite = 357,
+                scale = 1.0,
+            },
+            jobs = sh_config.police.jobs
+        }
+        exports.tk_dispatch:addCall(alert)
     elseif sh_config.police.dispatch == 'custom' then
         -- Add your custom dispatch system here
     else
